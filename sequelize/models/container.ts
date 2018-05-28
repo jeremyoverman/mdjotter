@@ -6,6 +6,9 @@ import { ContainerDAO } from '../dao/container';
 import { DbConnection } from '../dbConnection';
 
 /* yeo: imports */
+import { NoteAttributes, NoteInstance, RawNoteInstance } from './note';
+
+import { UserAttributes, UserInstance } from './user';
 
 /* The attributes of the model. Does not include id. */
 export interface ContainerAttributes {
@@ -14,7 +17,7 @@ export interface ContainerAttributes {
      */
 
     /* yeo-replace: attributes */
-    parent?: number;
+    parentId?: number;
     ownerId: string;
     name: string;
 
@@ -34,7 +37,36 @@ export interface RawContainerInstance extends ContainerAttributes, RawInstance {
 /* This is where you'll include the real sequelize instance stuff. */
 export interface ContainerInstance extends Sequelize.Instance < ContainerAttributes > , RawContainerInstance {
     /* yeo: instance */
+    addNote: Sequelize.HasManyAddAssociationMixin < NoteInstance, number > ;
+    addNotes: Sequelize.HasManyAddAssociationsMixin < NoteInstance, number > ;
+    countNotes: Sequelize.HasManyCountAssociationsMixin;
+    createNote: Sequelize.HasManyCreateAssociationMixin < NoteAttributes, NoteInstance > ;
+    getNotes: Sequelize.HasManyGetAssociationsMixin < NoteInstance > ;
+    hasNote: Sequelize.HasManyHasAssociationMixin < NoteInstance, number > ;
+    hasNotes: Sequelize.HasManyHasAssociationsMixin < NoteInstance, number > ;
+    removeNote: Sequelize.HasManyRemoveAssociationMixin < NoteInstance, number > ;
+    removeNotes: Sequelize.HasManyRemoveAssociationsMixin < NoteInstance, number > ;
+    setNotes: Sequelize.HasManySetAssociationsMixin < NoteInstance, number > ;
+
+    createUser: Sequelize.BelongsToCreateAssociationMixin < UserAttributes > ;
+    getUser: Sequelize.BelongsToGetAssociationMixin < UserInstance > ;
+
+    addContainer: Sequelize.HasManyAddAssociationMixin < ContainerInstance, number > ;
+    addContainers: Sequelize.HasManyAddAssociationsMixin < ContainerInstance, number > ;
+    countContainers: Sequelize.HasManyCountAssociationsMixin;
+    createContainer: Sequelize.HasManyCreateAssociationMixin < ContainerAttributes, ContainerInstance > ;
+    getContainers: Sequelize.HasManyGetAssociationsMixin < ContainerInstance > ;
+    hasContainer: Sequelize.HasManyHasAssociationMixin < ContainerInstance, number > ;
+    hasContainers: Sequelize.HasManyHasAssociationsMixin < ContainerInstance, number > ;
+    removeContainer: Sequelize.HasManyRemoveAssociationMixin < ContainerInstance, number > ;
+    removeContainers: Sequelize.HasManyRemoveAssociationsMixin < ContainerInstance, number > ;
+    setContainers: Sequelize.HasManySetAssociationsMixin < ContainerInstance, number > ;
 };
+
+export interface IRawContainerChildren {
+    containers: RawContainerInstance[],
+    notes: RawNoteInstance[]
+}
 
 /* This type will be added to DbConnection for you. You should be able to access
  * this model using something like:
@@ -113,6 +145,8 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
         });
 
         /* yeo: associations */
+        model.hasMany(db.note);
+
 
         return model;
     }

@@ -5,6 +5,8 @@
  */
 
 /* yeo: import */
-import "./controllers/container";
-import "./controllers/note";
 import "./controllers/user";
+
+export { ContainerAttributes, ContainerInstance, IRawContainerChildren, RawContainerInstance } from './sequelize/models/container';
+export { RawNoteInstance, NoteAttributes, NoteInstance } from './sequelize/models/note';
+export { ICreateContainerParams, ICreateNoteParams, ICreateUserBody, ILoginBody, ILoginResponse, ISearchBody } from './controllers/user'

@@ -33,7 +33,7 @@ export class NoteDAO < I, A > extends DAO {
         return db.note.create(attributes);
     }
 
-    update(id: number, attributes: NoteAttributes) {
+    update(id: number, attributes: Partial<NoteAttributes>) {
         return this.get(id)
             .then(note => note.update(attributes))
             .then(() => this.get(id));
@@ -42,5 +42,23 @@ export class NoteDAO < I, A > extends DAO {
     delete(id: number) {
         return this.get(id)
             .then(note => note.destroy());
+    }
+
+    async search(user_id: string, query: string) {
+        let user = await db.user.DAO.get(user_id);
+
+        return db.note.findAll({
+            where: {
+                ownerId: user_id,
+                [Sequelize.Op.or]: {
+                    title: {
+                        [Sequelize.Op.like]: `%${query}%`
+                    },
+                    contents: {
+                        [Sequelize.Op.like]: `%${query}%`
+                    }
+                }
+            }
+        });
     }
 }

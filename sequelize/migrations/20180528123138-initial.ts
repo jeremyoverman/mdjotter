@@ -95,8 +95,11 @@ module.exports = {
                     allowNull: false,
                 },
                 contents: {
+                    type: Sequelize.STRING
+                },
+                ownerId: {
                     type: Sequelize.STRING,
-                    allowNull: false,
+                    allowNull: false
                 },
                 createdAt: {
                     allowNull: false,
@@ -113,6 +116,16 @@ module.exports = {
                 references: {
                     table: 'containers',
                     field: 'id'
+                },
+                onDelete: 'cascade',
+                onUpdate: 'cascade'
+            }))
+            .then(() => queryInterface.addConstraint('notes', ['ownerId'], {
+                type: 'foreign key',
+                name: 'fk_notes_users1',
+                references: {
+                    table: 'users',
+                    field: 'username'
                 },
                 onDelete: 'cascade',
                 onUpdate: 'cascade'

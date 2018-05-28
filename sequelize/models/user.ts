@@ -6,6 +6,8 @@ import { UserDAO } from '../dao/user';
 import { DbConnection } from '../dbConnection';
 
 /* yeo: imports */
+import { NoteAttributes, NoteInstance } from './note';
+
 import { ContainerAttributes, ContainerInstance } from './container';
 
 
@@ -37,16 +39,43 @@ export interface RawUserInstance extends UserAttributes, RawInstance {
 /* This is where you'll include the real sequelize instance stuff. */
 export interface UserInstance extends Sequelize.Instance < UserAttributes > , RawUserInstance {
     /* yeo: instance */
-    addContainer: Sequelize.HasManyAddAssociationMixin < ContainerInstance, number > ;
-    addContainers: Sequelize.HasManyAddAssociationsMixin < ContainerInstance, number > ;
+    addNote: Sequelize.HasManyAddAssociationMixin < NoteInstance,
+    number > ;
+    addNotes: Sequelize.HasManyAddAssociationsMixin < NoteInstance,
+    number > ;
+    countNotes: Sequelize.HasManyCountAssociationsMixin;
+    createNote: Sequelize.HasManyCreateAssociationMixin < NoteAttributes,
+    NoteInstance > ;
+    getNotes: Sequelize.HasManyGetAssociationsMixin < NoteInstance > ;
+    hasNote: Sequelize.HasManyHasAssociationMixin < NoteInstance,
+    number > ;
+    hasNotes: Sequelize.HasManyHasAssociationsMixin < NoteInstance,
+    number > ;
+    removeNote: Sequelize.HasManyRemoveAssociationMixin < NoteInstance,
+    number > ;
+    removeNotes: Sequelize.HasManyRemoveAssociationsMixin < NoteInstance,
+    number > ;
+    setNotes: Sequelize.HasManySetAssociationsMixin < NoteInstance,
+    number > ;
+
+    addContainer: Sequelize.HasManyAddAssociationMixin < ContainerInstance,
+    number > ;
+    addContainers: Sequelize.HasManyAddAssociationsMixin < ContainerInstance,
+    number > ;
     countContainers: Sequelize.HasManyCountAssociationsMixin;
-    createContainer: Sequelize.HasManyCreateAssociationMixin < ContainerAttributes, ContainerInstance > ;
+    createContainer: Sequelize.HasManyCreateAssociationMixin < ContainerAttributes,
+    ContainerInstance > ;
     getContainers: Sequelize.HasManyGetAssociationsMixin < ContainerInstance > ;
-    hasContainer: Sequelize.HasManyHasAssociationMixin < ContainerInstance, number > ;
-    hasContainers: Sequelize.HasManyHasAssociationsMixin < ContainerInstance, number > ;
-    removeContainer: Sequelize.HasManyRemoveAssociationMixin < ContainerInstance, number > ;
-    removeContainers: Sequelize.HasManyRemoveAssociationsMixin < ContainerInstance, number > ;
-    setContainers: Sequelize.HasManySetAssociationsMixin < ContainerInstance, number > ;
+    hasContainer: Sequelize.HasManyHasAssociationMixin < ContainerInstance,
+    number > ;
+    hasContainers: Sequelize.HasManyHasAssociationsMixin < ContainerInstance,
+    number > ;
+    removeContainer: Sequelize.HasManyRemoveAssociationMixin < ContainerInstance,
+    number > ;
+    removeContainers: Sequelize.HasManyRemoveAssociationsMixin < ContainerInstance,
+    number > ;
+    setContainers: Sequelize.HasManySetAssociationsMixin < ContainerInstance,
+    number > ;
 
 };
 
@@ -116,6 +145,9 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
         /* Add your associations here */
 
         /* yeo: associations */
+        model.hasMany(db.note, {
+            foreignKey: 'ownerId'
+        });
 
         model.hasMany(db.container, {
             foreignKey: 'ownerId'

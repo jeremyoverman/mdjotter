@@ -1,39 +1,9 @@
 /* tslint:disable */
 import { Controller, ValidateParam, FieldErrors, ValidateError, TsoaRoute } from 'tsoa';
-import { ContainerController } from './../controllers/container';
-import { NoteController } from './../controllers/note';
 import { UserController } from './../controllers/user';
 import { expressAuthentication } from './../authentication/index';
 
 const models: TsoaRoute.Models = {
-    "PromiseLikeRawContainerInstance[]": {
-    },
-    "PromiseLikeobject": {
-    },
-    "PromiseLikeRawContainerInstance": {
-    },
-    "ContainerAttributes": {
-        "properties": {
-            "parent": { "dataType": "double" },
-            "ownerId": { "dataType": "string", "required": true },
-            "name": { "dataType": "string", "required": true },
-        },
-    },
-    "PromiseLikevoid": {
-    },
-    "PromiseLikeRawNoteInstance[]": {
-    },
-    "PromiseLikeRawNoteInstance": {
-    },
-    "NoteAttributes": {
-        "properties": {
-            "containerId": { "dataType": "double", "required": true },
-            "title": { "dataType": "string", "required": true },
-            "contents": { "dataType": "string", "required": true },
-        },
-    },
-    "PromiseLikeRawUserInstance[]": {
-    },
     "RawUserInstance": {
         "properties": {
             "username": { "dataType": "string", "required": true },
@@ -53,6 +23,8 @@ const models: TsoaRoute.Models = {
             "email": { "dataType": "string", "required": true },
         },
     },
+    "PromiseLikeobject": {
+    },
     "UserAttributes": {
         "properties": {
             "username": { "dataType": "string", "required": true },
@@ -62,222 +34,72 @@ const models: TsoaRoute.Models = {
             "salt": { "dataType": "string" },
         },
     },
+    "PromiseLikevoid": {
+    },
+    "ILoginResponse": {
+        "properties": {
+            "token": { "dataType": "string", "required": true },
+        },
+    },
     "ILoginBody": {
         "properties": {
             "password": { "dataType": "string", "required": true },
         },
     },
+    "RawContainerInstance": {
+        "properties": {
+            "parentId": { "dataType": "double" },
+            "ownerId": { "dataType": "string", "required": true },
+            "name": { "dataType": "string", "required": true },
+            "id": { "dataType": "double", "required": true },
+            "createdAt": { "dataType": "datetime", "required": true },
+            "updatedAt": { "dataType": "datetime", "required": true },
+        },
+    },
+    "ICreateContainerParams": {
+        "properties": {
+            "parentId": { "dataType": "double" },
+            "name": { "dataType": "string", "required": true },
+        },
+    },
+    "PartialICreateContainerParams": {
+    },
+    "RawNoteInstance": {
+        "properties": {
+            "containerId": { "dataType": "double", "required": true },
+            "title": { "dataType": "string", "required": true },
+            "contents": { "dataType": "string" },
+            "ownerId": { "dataType": "string", "required": true },
+            "id": { "dataType": "double", "required": true },
+            "createdAt": { "dataType": "datetime", "required": true },
+            "updatedAt": { "dataType": "datetime", "required": true },
+        },
+    },
+    "IRawContainerChildren": {
+        "properties": {
+            "containers": { "dataType": "array", "array": { "ref": "RawContainerInstance" }, "required": true },
+            "notes": { "dataType": "array", "array": { "ref": "RawNoteInstance" }, "required": true },
+        },
+    },
+    "PromiseLikeRawNoteInstance": {
+    },
+    "ICreateNoteParams": {
+        "properties": {
+            "title": { "dataType": "string", "required": true },
+            "contents": { "dataType": "string" },
+            "containerId": { "dataType": "double", "required": true },
+        },
+    },
+    "PartialICreateNoteParams": {
+    },
+    "ISearchBody": {
+        "properties": {
+            "query": { "dataType": "string", "required": true },
+        },
+    },
 };
 
 export function RegisterRoutes(app: any) {
-    app.get('/containers',
-        function(request: any, response: any, next: any) {
-            const args = {
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new ContainerController();
-
-
-            const promise = controller.getContainers.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/containers/:container_id',
-        function(request: any, response: any, next: any) {
-            const args = {
-                container_id: { "in": "path", "name": "container_id", "required": true, "dataType": "double" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new ContainerController();
-
-
-            const promise = controller.getContainer.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.post('/containers',
-        function(request: any, response: any, next: any) {
-            const args = {
-                attributes: { "in": "body", "name": "attributes", "required": true, "ref": "ContainerAttributes" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new ContainerController();
-
-
-            const promise = controller.createContainer.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.patch('/containers/:container_id',
-        function(request: any, response: any, next: any) {
-            const args = {
-                container_id: { "in": "path", "name": "container_id", "required": true, "dataType": "double" },
-                attributes: { "in": "body", "name": "attributes", "required": true, "ref": "ContainerAttributes" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new ContainerController();
-
-
-            const promise = controller.updateContainer.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.delete('/containers/:container_id',
-        function(request: any, response: any, next: any) {
-            const args = {
-                container_id: { "in": "path", "name": "container_id", "required": true, "dataType": "double" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new ContainerController();
-
-
-            const promise = controller.deleteContainer.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/notes',
-        function(request: any, response: any, next: any) {
-            const args = {
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new NoteController();
-
-
-            const promise = controller.getNotes.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/notes/:note_id',
-        function(request: any, response: any, next: any) {
-            const args = {
-                note_id: { "in": "path", "name": "note_id", "required": true, "dataType": "double" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new NoteController();
-
-
-            const promise = controller.getNote.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.post('/notes',
-        function(request: any, response: any, next: any) {
-            const args = {
-                attributes: { "in": "body", "name": "attributes", "required": true, "ref": "NoteAttributes" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new NoteController();
-
-
-            const promise = controller.createNote.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.patch('/notes/:note_id',
-        function(request: any, response: any, next: any) {
-            const args = {
-                note_id: { "in": "path", "name": "note_id", "required": true, "dataType": "double" },
-                attributes: { "in": "body", "name": "attributes", "required": true, "ref": "NoteAttributes" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new NoteController();
-
-
-            const promise = controller.updateNote.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.delete('/notes/:note_id',
-        function(request: any, response: any, next: any) {
-            const args = {
-                note_id: { "in": "path", "name": "note_id", "required": true, "dataType": "double" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new NoteController();
-
-
-            const promise = controller.deleteNote.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/users',
-        function(request: any, response: any, next: any) {
-            const args = {
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new UserController();
-
-
-            const promise = controller.getUsers.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
     app.get('/users/:user_id',
         function(request: any, response: any, next: any) {
             const args = {
@@ -317,6 +139,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.patch('/users/:user_id',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 user_id: { "in": "path", "name": "user_id", "required": true, "dataType": "string" },
@@ -337,6 +160,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.delete('/users/:user_id',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 user_id: { "in": "path", "name": "user_id", "required": true, "dataType": "string" },
@@ -356,6 +180,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/users/:user_id/containers',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 user_id: { "in": "path", "name": "user_id", "required": true, "dataType": "string" },
@@ -394,7 +219,256 @@ export function RegisterRoutes(app: any) {
             const promise = controller.login.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
+    app.get('/users/:user_id/containers/:container_id',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                container_id: { "in": "path", "name": "container_id", "required": true, "dataType": "double" },
+            };
 
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.getContainer.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/users/:user_id/containers',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                user_id: { "in": "path", "name": "user_id", "required": true, "dataType": "string" },
+                params: { "in": "body", "name": "params", "required": true, "ref": "ICreateContainerParams" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.createContainer.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.patch('/users/:user_id/containers/:container_id',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                container_id: { "in": "path", "name": "container_id", "required": true, "dataType": "double" },
+                params: { "in": "body", "name": "params", "required": true, "ref": "PartialICreateContainerParams" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.updateContainer.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.delete('/users/:user_id/containers/:container_id',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                container_id: { "in": "path", "name": "container_id", "required": true, "dataType": "double" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.deleteContainer.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/users/:user_id/containers/:container_id/children',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                container_id: { "in": "path", "name": "container_id", "required": true, "dataType": "double" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.getChildren.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/users/:user_id/notes',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                user_id: { "in": "path", "name": "user_id", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.getNotes.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/users/:user_id/notes/:note_id',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                note_id: { "in": "path", "name": "note_id", "required": true, "dataType": "double" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.getNote.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/users/:user_id/notes',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                user_id: { "in": "path", "name": "user_id", "required": true, "dataType": "string" },
+                params: { "in": "body", "name": "params", "required": true, "ref": "ICreateNoteParams" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.createNote.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.patch('/users/:user_id/notes/:note_id',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                note_id: { "in": "path", "name": "note_id", "required": true, "dataType": "double" },
+                attributes: { "in": "body", "name": "attributes", "required": true, "ref": "PartialICreateNoteParams" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.updateNote.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.delete('/users/:user_id/notes/:note_id',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                note_id: { "in": "path", "name": "note_id", "required": true, "dataType": "double" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.deleteNote.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/users/:user_id/notes/search',
+        authenticateMiddleware([{ "name": "owner", "scopes": ["user"] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                user_id: { "in": "path", "name": "user_id", "required": true, "dataType": "string" },
+                params: { "in": "body", "name": "params", "required": true, "ref": "ISearchBody" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.searchNotes.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+
+    function authenticateMiddleware(security: TsoaRoute.Security[] = []) {
+        return (request: any, response: any, next: any) => {
+            let responded = 0;
+            let success = false;
+            for (const secMethod of security) {
+                expressAuthentication(request, secMethod.name, secMethod.scopes).then((user: any) => {
+                    // only need to respond once
+                    if (!success) {
+                        success = true;
+                        responded++;
+                        request['user'] = user;
+                        next();
+                    }
+                })
+                    .catch((error: any) => {
+                        responded++;
+                        if (responded == security.length && !success) {
+                            response.status(401);
+                            next(error)
+                        }
+                    })
+            }
+        }
+    }
 
     function promiseHandler(controllerObj: any, promise: any, response: any, next: any) {
         return Promise.resolve(promise)

@@ -6,6 +6,8 @@ import { NoteDAO } from '../dao/note';
 import { DbConnection } from '../dbConnection';
 
 /* yeo: imports */
+import { UserAttributes, UserInstance } from './user';
+
 
 /* The attributes of the model. Does not include id. */
 export interface NoteAttributes {
@@ -16,7 +18,8 @@ export interface NoteAttributes {
     /* yeo-replace: attributes */
     containerId: number;
     title: string;
-    contents: string;
+    contents?: string;
+    ownerId: string;
 
     /* yeo-end */
 }
@@ -34,6 +37,9 @@ export interface RawNoteInstance extends NoteAttributes, RawInstance {
 /* This is where you'll include the real sequelize instance stuff. */
 export interface NoteInstance extends Sequelize.Instance < NoteAttributes > , RawNoteInstance {
     /* yeo: instance */
+    createUser: Sequelize.BelongsToCreateAssociationMixin < UserAttributes > ;
+    getUser: Sequelize.BelongsToGetAssociationMixin < UserInstance > ;
+
 };
 
 /* This type will be added to DbConnection for you. You should be able to access
@@ -86,8 +92,7 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
             allowNull: false,
         },
         contents: {
-            type: Sequelize.STRING,
-            allowNull: false,
+            type: Sequelize.STRING
         },
 
         /* yeo-end */
@@ -106,6 +111,10 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
         /* yeo-end */
 
         /* yeo: associations */
+        model.belongsTo(db.user, {
+            foreignKey: 'ownerId',
+            targetKey: 'username'
+        });
 
         model.belongsTo(db.container, {
             foreignKey: 'containerId',

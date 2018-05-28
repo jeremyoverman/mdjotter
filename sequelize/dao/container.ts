@@ -1,9 +1,10 @@
 import * as Sequelize from 'sequelize';
 import db from '../models/index';
-import { ContainerInstance, ContainerAttributes } from '../models/container';
+import { ContainerInstance, ContainerAttributes, RawContainerInstance } from '../models/container';
 
 import { DAO } from '../dao';
 import { NOT_FOUND } from '../../lib/errors';
+import { RawNoteInstance } from '../models/note';
 
 export class ContainerDAO < I, A > extends DAO {
     /**
@@ -33,7 +34,7 @@ export class ContainerDAO < I, A > extends DAO {
         return db.container.create(attributes);
     }
 
-    update(id: number, attributes: ContainerAttributes) {
+    update(id: number, attributes: Partial<ContainerAttributes>) {
         return this.get(id)
             .then(container => container.update(attributes))
             .then(() => this.get(id));
@@ -42,5 +43,17 @@ export class ContainerDAO < I, A > extends DAO {
     delete(id: number) {
         return this.get(id)
             .then(container => container.destroy());
+    }
+
+    async getChildren(id: number) {
+        let parent = await this.get(id);
+
+        let containers = await parent.getContainers();
+        let notes = await parent.getNotes();
+
+        return {
+            containers,
+            notes
+        }
     }
 }

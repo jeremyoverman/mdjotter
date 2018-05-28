@@ -63,4 +63,10 @@ export class UserDAO < I, A > extends DAO {
 
         return secret;
     }
+
+    async getNotes (id: string) {
+        let user = await this.get(id);
+
+        return user.getNotes();
+    }
 }

@@ -32,4 +32,11 @@ export default {
      * }
      * ```
      */
+    async user(username: string, decodedUsername: string) {
+        if (username === decodedUsername) {
+            return Promise.resolve();
+        }
+
+        return Promise.reject(NOT_OWNER);
+    }
 }

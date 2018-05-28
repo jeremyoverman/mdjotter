@@ -31,12 +31,15 @@ app.use('*', (req, res, next) => {
     res.sendStatus(404);
 })
 
+app.use((err, req, res, next) => {
+    console.log('Error:', err);
+});
+
 // Start the server
 const server = http.createServer(app);  
 server.listen(port);
 
 // Handle server events
-server.on('error', err => {throw err});
 server.on('listening', _ => {
     let address = server.address();
 
