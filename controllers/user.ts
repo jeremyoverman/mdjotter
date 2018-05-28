@@ -1,11 +1,23 @@
 import db from '../sequelize/models';
 import Controller from '../controller';
-import { NOT_FOUND } from '../lib/errors';
+import * as Errors from '../lib/errors';
 
 /* yeo: imports */
 import { RawUserInstance, UserAttributes } from '../sequelize/models/user';
 
 import { Get, Put, Post, Delete, Patch, Security, Tags, Route, Response, Body, SuccessResponse } from 'tsoa';
+import { pbkdf2, generateRandomString } from '../lib/crypto';
+import { createToken } from '../lib/jwt';
+
+export interface ILoginBody {
+    password: string;
+}
+
+export interface ICreateUserBody {
+    username: string;
+    password: string;
+    email: string;
+}
 
 @Route('users')
 @Tags('Users')
@@ -34,7 +46,7 @@ export class UserController extends Controller {
 
     getUser(user_id: string): PromiseLike < RawUserInstance | void > {
         return db.user.DAO.get(user_id).catch(err => {
-            if (err === NOT_FOUND) this.setStatus(404);
+            if (err === Errors.NOT_FOUND) this.setStatus(404);
         });
     }
 
@@ -47,8 +59,14 @@ export class UserController extends Controller {
     @Response(201)
     @Response(400)
 
-    createUser(@Body() attributes: UserAttributes): PromiseLike < RawUserInstance > {
-        return db.user.DAO.create(attributes).then(user => {
+    async createUser(@Body() attributes: ICreateUserBody): Promise< RawUserInstance > {
+        let salt = generateRandomString(32);
+        let createAttributes = {
+            ...attributes,
+            password: await pbkdf2(attributes.password, salt),
+            salt: salt
+        }
+        return db.user.DAO.create(createAttributes).then(user => {
             this.setStatus(201);
             return user;
         });
@@ -66,7 +84,7 @@ export class UserController extends Controller {
 
     updateUser(user_id: string, @Body() attributes: UserAttributes): PromiseLike < RawUserInstance | void > {
         return db.user.DAO.update(user_id, attributes).catch(err => {
-            if (err === NOT_FOUND) this.setStatus(404);
+            if (err === Errors.NOT_FOUND) this.setStatus(404);
         });
     }
 
@@ -83,7 +101,20 @@ export class UserController extends Controller {
         return db.user.DAO.delete(user_id).then(() => {
             this.setStatus(204);
         }).catch(err => {
-            if (err === NOT_FOUND) this.setStatus(404);
+            if (err === Errors.NOT_FOUND) this.setStatus(404);
         });
+    }
+
+    @Post('{user_id}/login')
+    @Response(401)
+
+    async login(user_id: string, @Body() body: ILoginBody) {
+        let user = await db.user.DAO.get(user_id);
+
+        if (user.password === await pbkdf2(body.password, user.salt)) {
+            return { token: await createToken(user.username) };
+        } else {
+            this.setStatus(401);
+        }
     }
 }

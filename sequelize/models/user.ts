@@ -15,9 +15,10 @@ export interface UserAttributes {
 
     /* yeo-replace: attributes */
     username: string;
-    passhash: string;
+    password: string;
     email: string;
-
+    secret?: string;
+    salt?: string;
     /* yeo-end */
 }
 
@@ -76,7 +77,7 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
             primaryKey: true,
             allowNull: false,
         },
-        passhash: {
+        password: {
             type: Sequelize.STRING,
             allowNull: false,
         },
@@ -84,6 +85,12 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
             type: Sequelize.STRING,
             allowNull: false,
         },
+        secret: {
+            type: Sequelize.STRING
+        },
+        salt: {
+            type: Sequelize.STRING
+        }
 
         /* yeo-end */
     }, {
@@ -97,7 +104,7 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
 
         /* yeo: associations */
         model.hasMany(db.container, {
-            foreignKey: 'username'
+            foreignKey: 'ownerId'
         });
 
         return model;

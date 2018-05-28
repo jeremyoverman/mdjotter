@@ -4,6 +4,7 @@ import { UserInstance, UserAttributes } from '../models/user';
 
 import { DAO } from '../dao';
 import { NOT_FOUND } from '../../lib/errors';
+import { generateRandomString } from '../../lib/crypto';
 
 export class UserDAO < I, A > extends DAO {
     /**
@@ -42,5 +43,14 @@ export class UserDAO < I, A > extends DAO {
     delete(id: string) {
         return this.get(id)
             .then(user => user.destroy());
+    }
+
+    async generateSecret(id: string) {
+        let user = await this.get(id);
+        let secret = generateRandomString(32)
+
+        await user.update({ secret });
+
+        return secret;
     }
 }

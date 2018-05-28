@@ -21,14 +21,13 @@ export function create(number ? ) {
 
 export const goodAttributes: UserAttributes = {
     email: 'test@email.com',
-    passhash: '123',
+    password: '123',
     username: 'username'
-
 };
 
 export const goodUpdateAttributes: UserAttributes = {
     email: 'test2@email.com',
-    passhash: 'asdf',
+    password: 'asdf',
     username: 'user2'
 };
 

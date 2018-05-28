@@ -36,11 +36,25 @@ const models: TsoaRoute.Models = {
     },
     "PromiseLikeRawUserInstance": {
     },
+    "ICreateUserBody": {
+        "properties": {
+            "username": { "dataType": "string", "required": true },
+            "password": { "dataType": "string", "required": true },
+            "email": { "dataType": "string", "required": true },
+        },
+    },
     "UserAttributes": {
         "properties": {
             "username": { "dataType": "string", "required": true },
-            "passhash": { "dataType": "string", "required": true },
+            "password": { "dataType": "string", "required": true },
             "email": { "dataType": "string", "required": true },
+            "secret": { "dataType": "string" },
+            "salt": { "dataType": "string" },
+        },
+    },
+    "ILoginBody": {
+        "properties": {
+            "password": { "dataType": "string", "required": true },
         },
     },
 };
@@ -276,7 +290,7 @@ export function RegisterRoutes(app: any) {
     app.post('/users',
         function(request: any, response: any, next: any) {
             const args = {
-                attributes: { "in": "body", "name": "attributes", "required": true, "ref": "UserAttributes" },
+                attributes: { "in": "body", "name": "attributes", "required": true, "ref": "ICreateUserBody" },
             };
 
             let validatedArgs: any[] = [];
@@ -329,6 +343,26 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.deleteUser.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/users/:user_id/login',
+        function(request: any, response: any, next: any) {
+            const args = {
+                user_id: { "in": "path", "name": "user_id", "required": true, "dataType": "string" },
+                body: { "in": "body", "name": "body", "required": true, "ref": "ILoginBody" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.login.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
 

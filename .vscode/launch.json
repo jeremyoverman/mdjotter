@@ -49,7 +49,7 @@
             "sourceMaps": true,
             "outputCapture": "std",
             "env":{
-                "DEBUG": "biddle:*"
+                "DEBUG": "mdjotter:*"
             },
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"

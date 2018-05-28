@@ -106,12 +106,11 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
         /* yeo-end */
 
         model.belongsTo(db.user, {
-            foreignKey: 'ownerId'
+            foreignKey: 'ownerId',
         });
-        model.belongsTo(db.container, {
+        model.hasMany(db.container, {
             foreignKey: 'parentId'
         });
-        model.hasMany(db.container);
 
         /* yeo: associations */
 

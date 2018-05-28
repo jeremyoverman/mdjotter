@@ -3,7 +3,7 @@ import db from '../sequelize/models';
 import config from '../config';
 
 export interface IToken {
-    user: number;
+    user: string;
     scopes?: string[];
 }
 
@@ -28,15 +28,7 @@ export function getUserFromToken(token: string) {
  * @param userid The user id to create the token for
  */
 export function createToken(userid) {
-    // return db.user.DAO.generateSecret(userid).then(secret => {
-    return new Promise((resolve, reject) => {
-        /**
-         * This promise should be called to a user DAO that generates a secret
-         * for the user. See the comments in `authentication.ts` for more
-         * information.
-         */
-        resolve('my-secret');
-    }).then((secret: string) => {
+    return db.user.DAO.generateSecret(userid).then((secret: string) => {
         return jwt.sign({ user: userid }, secret, {
             expiresIn: config.jwt_expire
         });

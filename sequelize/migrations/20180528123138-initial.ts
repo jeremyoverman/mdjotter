@@ -9,13 +9,19 @@ module.exports = {
                     primaryKey: true,
                     allowNull: false,
                 },
-                passhash: {
+                password: {
                     type: Sequelize.STRING,
                     allowNull: false,
                 },
                 email: {
                     type: Sequelize.STRING,
                     allowNull: false,
+                },
+                secret: {
+                    type: Sequelize.STRING,
+                },
+                salt: {
+                    type: Sequelize.STRING
                 },
                 createdAt: {
                     allowNull: false,

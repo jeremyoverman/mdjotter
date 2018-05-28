@@ -26,13 +26,13 @@ describe('In the User DAO', () => {
 
         describe('with a good id', () => {
             it('should return the user', () => {
-                return dao.get(1);
+                return dao.get(UserSupport.goodAttributes.username);
             });
         });
 
         describe('with a bad id', () => {
             it('should get rejected', () => {
-                return dao.get(2).then(() => {
+                return dao.get(UserSupport.badAttributes.username).then(() => {
                     throw new Error('Should reject');
                 }).catch(() => {});
             });
@@ -71,13 +71,13 @@ describe('In the User DAO', () => {
         describe('with a good id', () => {
             describe('and good attributes', () => {
                 it('should return the user', () => {
-                    return dao.update(1, UserSupport.goodUpdateAttributes).then(user => {
+                    return dao.update(UserSupport.goodAttributes.username, UserSupport.goodUpdateAttributes).then(user => {
                         expect(user).toEqual(jasmine.objectContaining(UserSupport.goodUpdateAttributes));
                     });
                 });
 
                 it('should update the user', () => {
-                    return dao.update(1, UserSupport.goodUpdateAttributes).then(() => {
+                    return dao.update(UserSupport.goodAttributes.username, UserSupport.goodUpdateAttributes).then(() => {
                         return db.user.findById(1).then(user => {
                             expect(user).toEqual(jasmine.objectContaining(UserSupport.goodUpdateAttributes));
                         });
@@ -87,13 +87,13 @@ describe('In the User DAO', () => {
 
             describe('and bad attributes', () => {
                 it('should get rejected', () => {
-                    return dao.update(1, UserSupport.badAttributes).then(() => {
+                    return dao.update(UserSupport.goodAttributes.username, UserSupport.badAttributes).then(() => {
                         throw new Error('should reject')
                     }).catch(() => {});
                 });
 
                 it('should not update the user', () => {
-                    return dao.update(1, UserSupport.badAttributes).catch(() => {
+                    return dao.update(UserSupport.goodAttributes.username, UserSupport.badAttributes).catch(() => {
                         return db.user.findById(1).then(user => {
                             expect(user).toEqual(jasmine.objectContaining(UserSupport.goodAttributes));
                         });
@@ -104,7 +104,7 @@ describe('In the User DAO', () => {
 
         describe('with a bad id', () => {
             it('should get rejected', () => {
-                return dao.update(2, UserSupport.goodAttributes).then(() => {
+                return dao.update(UserSupport.badAttributes.username, UserSupport.goodUpdateAttributes).then(() => {
                     throw new Error('should reject');
                 }).catch(() => {});
             });
@@ -116,7 +116,7 @@ describe('In the User DAO', () => {
 
         describe('with a good id', () => {
             it('should delete the user', () => {
-                return dao.delete(1).then(() => {
+                return dao.delete(UserSupport.goodAttributes.username).then(() => {
                     return db.user.findById(1).then(user => {
                         expect(user).toBe(null);
                     });
@@ -126,7 +126,7 @@ describe('In the User DAO', () => {
 
         describe('with a bad id', () => {
             it('should get rejected', () => {
-                return dao.delete(2).then(() => {
+                return dao.delete(UserSupport.badAttributes.username).then(() => {
                     throw new Error('should reject');
                 }).catch(() => {});
             });
