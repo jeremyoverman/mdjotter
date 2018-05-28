@@ -1,7 +1,6 @@
 import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
-import * as Debug from 'debug';
-
+import Debug from 'debug';
 import db from '../sequelize/models'
 import config from '../config';
 import owners from './owner';

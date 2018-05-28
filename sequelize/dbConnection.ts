@@ -9,6 +9,9 @@ import * as Sequelize from 'sequelize';
  */
 
 /* yeo: import */
+import { TNoteModel } from './models/note';
+import { TContainerModel } from './models/container';
+import { TUserModel } from './models/user';
 
 /**
  * Add the model here
@@ -17,5 +20,8 @@ import * as Sequelize from 'sequelize';
  */
 export interface DbConnection {
     /* yeo: type */
+    note: TNoteModel;
+    container: TContainerModel;
+    user: TUserModel;
     sequelize: Sequelize.Sequelize;
 }

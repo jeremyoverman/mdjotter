@@ -5,3 +5,6 @@
  */
 
 /* yeo: import */
+import "./controllers/container";
+import "./controllers/note";
+import "./controllers/user";

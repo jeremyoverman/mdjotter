@@ -2,8 +2,7 @@ import * as http from "http";
 import * as express from "express";  
 import * as bodyParser from "body-parser";  
 import * as swaggerUI from "swagger-ui-express";  
-import * as Debug from 'debug';
-
+import Debug from 'debug';
 let debug = Debug('mdjotter:http');
 
 import { RegisterRoutes } from "./routes/routes";  
@@ -24,7 +23,8 @@ RegisterRoutes(app);
 // Serve up Swagger UI
 const swaggerJSON = require('./swagger/swagger.json');  
 app.use('/swagger.json', express.static(__dirname + '/swagger/swagger.json'));
-app.get('/', swaggerUI.serve, swaggerUI.setup(swaggerJSON)); 
+app.use('/docs', swaggerUI.serve); 
+app.get('/docs', swaggerUI.setup(swaggerJSON)); 
 
 // Handle 404's
 app.use('*', (req, res, next) => {
@@ -38,7 +38,10 @@ server.listen(port);
 // Handle server events
 server.on('error', err => {throw err});
 server.on('listening', _ => {
-    debug('Listening on port ' + server.address().port);
+    let address = server.address();
+
+    let port = typeof address === 'string' ? address : address.port;
+    debug('Listening on port ' + port);
 });
 
 export default app;  

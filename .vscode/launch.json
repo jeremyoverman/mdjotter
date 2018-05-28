@@ -8,14 +8,14 @@
             "type": "node",
             "request": "launch",
             "name": "Debug Tests",
-            "program": "${workspaceFolder}\\spec\\runner.ts",
+            "program": "${workspaceFolder}/spec/runner.ts",
             "sourceMaps": true,
             "outputCapture": "std",
             "env":{
                 "NODE_ENV": "test"
             },
             "outFiles": [
-                "${workspaceFolder}\\dist\\**\\*.js"
+                "${workspaceFolder}/dist/**/*.js"
             ],
             "skipFiles": [
                 "node_modules/**/*.js",
@@ -26,7 +26,7 @@
             "type": "node",
             "request": "launch",
             "name": "Build and Debug",
-            "program": "${workspaceFolder}\\app.ts",
+            "program": "${workspaceFolder}/app.ts",
             "sourceMaps": true,
             "preLaunchTask": "Build",
             "outputCapture": "std",
@@ -34,7 +34,7 @@
                 "DEBUG": "biddle:*"
             },
             "outFiles": [
-                "${workspaceFolder}\\dist\\**\\*.js"
+                "${workspaceFolder}/dist/**/*.js"
             ],
             "skipFiles": [
                 "node_modules/**/*.js",
@@ -45,14 +45,14 @@
             "type": "node",
             "request": "launch",
             "name": "Debug Only",
-            "program": "${workspaceFolder}\\app.ts",
+            "program": "${workspaceFolder}/app.ts",
             "sourceMaps": true,
             "outputCapture": "std",
             "env":{
                 "DEBUG": "biddle:*"
             },
             "outFiles": [
-                "${workspaceFolder}\\dist\\**\\*.js"
+                "${workspaceFolder}/dist/**/*.js"
             ],
             "skipFiles": [
                 "node_modules/**/*.js",

@@ -5,10 +5,10 @@ let config = {
     "operatorsAliases": false
   },
   "development": {
-    "username": "",
-    "password": "",
-    "database": "",
-    "host": "",
+    "username": "root",
+    "password": "testpassword",
+    "database": "mdjotter",
+    "host": "localhost",
     "port": 3306,
     "dialect": "mysql",
     "logging": false,
