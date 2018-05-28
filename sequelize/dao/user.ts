@@ -45,6 +45,16 @@ export class UserDAO < I, A > extends DAO {
             .then(user => user.destroy());
     }
 
+    async getContainers (id: string) {
+        let user = await this.get(id);
+
+        return user.getContainers({
+            where: {
+                parentId: null
+            }
+        });
+    }
+
     async generateSecret(id: string) {
         let user = await this.get(id);
         let secret = generateRandomString(32)

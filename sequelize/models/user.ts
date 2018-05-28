@@ -6,6 +6,8 @@ import { UserDAO } from '../dao/user';
 import { DbConnection } from '../dbConnection';
 
 /* yeo: imports */
+import { ContainerAttributes, ContainerInstance } from './container';
+
 
 /* The attributes of the model. Does not include id. */
 export interface UserAttributes {
@@ -17,8 +19,8 @@ export interface UserAttributes {
     username: string;
     password: string;
     email: string;
-    secret?: string;
-    salt?: string;
+    secret ? : string;
+    salt ? : string;
     /* yeo-end */
 }
 
@@ -35,6 +37,17 @@ export interface RawUserInstance extends UserAttributes, RawInstance {
 /* This is where you'll include the real sequelize instance stuff. */
 export interface UserInstance extends Sequelize.Instance < UserAttributes > , RawUserInstance {
     /* yeo: instance */
+    addContainer: Sequelize.HasManyAddAssociationMixin < ContainerInstance, number > ;
+    addContainers: Sequelize.HasManyAddAssociationsMixin < ContainerInstance, number > ;
+    countContainers: Sequelize.HasManyCountAssociationsMixin;
+    createContainer: Sequelize.HasManyCreateAssociationMixin < ContainerAttributes, ContainerInstance > ;
+    getContainers: Sequelize.HasManyGetAssociationsMixin < ContainerInstance > ;
+    hasContainer: Sequelize.HasManyHasAssociationMixin < ContainerInstance, number > ;
+    hasContainers: Sequelize.HasManyHasAssociationsMixin < ContainerInstance, number > ;
+    removeContainer: Sequelize.HasManyRemoveAssociationMixin < ContainerInstance, number > ;
+    removeContainers: Sequelize.HasManyRemoveAssociationsMixin < ContainerInstance, number > ;
+    setContainers: Sequelize.HasManySetAssociationsMixin < ContainerInstance, number > ;
+
 };
 
 /* This type will be added to DbConnection for you. You should be able to access
@@ -103,6 +116,7 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
         /* Add your associations here */
 
         /* yeo: associations */
+
         model.hasMany(db.container, {
             foreignKey: 'ownerId'
         });

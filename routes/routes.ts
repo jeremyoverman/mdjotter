@@ -34,7 +34,17 @@ const models: TsoaRoute.Models = {
     },
     "PromiseLikeRawUserInstance[]": {
     },
-    "PromiseLikeRawUserInstance": {
+    "RawUserInstance": {
+        "properties": {
+            "username": { "dataType": "string", "required": true },
+            "password": { "dataType": "string", "required": true },
+            "email": { "dataType": "string", "required": true },
+            "secret": { "dataType": "string" },
+            "salt": { "dataType": "string" },
+            "id": { "dataType": "double", "required": true },
+            "createdAt": { "dataType": "datetime", "required": true },
+            "updatedAt": { "dataType": "datetime", "required": true },
+        },
     },
     "ICreateUserBody": {
         "properties": {
@@ -343,6 +353,25 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.deleteUser.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/users/:user_id/containers',
+        function(request: any, response: any, next: any) {
+            const args = {
+                user_id: { "in": "path", "name": "user_id", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UserController();
+
+
+            const promise = controller.getContainers.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/users/:user_id/login',

@@ -8,6 +8,7 @@ import { RawUserInstance, UserAttributes } from '../sequelize/models/user';
 import { Get, Put, Post, Delete, Patch, Security, Tags, Route, Response, Body, SuccessResponse } from 'tsoa';
 import { pbkdf2, generateRandomString } from '../lib/crypto';
 import { createToken } from '../lib/jwt';
+import { RawContainerInstance } from '../sequelize/models/container';
 
 export interface ILoginBody {
     password: string;
@@ -103,6 +104,12 @@ export class UserController extends Controller {
         }).catch(err => {
             if (err === Errors.NOT_FOUND) this.setStatus(404);
         });
+    }
+
+    @Get('{user_id}/containers')
+
+    async getContainers(user_id: string): Promise<RawContainerInstance[] | void> {
+        return db.user.DAO.getContainers(user_id);
     }
 
     @Post('{user_id}/login')
