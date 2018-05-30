@@ -69,6 +69,7 @@ gulp.task('copy-files', ['swagger'], function () {
     gulp.src([
         '**/*.json',
         '.sequelizerc',
+        'package.json',
         '!node_modules/**/*',
         '!.vscode/**/*',
         '!dist/**/*'
