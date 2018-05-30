@@ -1,8 +1,20 @@
 const path = require('path');
 
-module.exports = {
-    'config': path.resolve('dist', 'sequelize', 'config', 'config_cli.js'),
-    'models-path': path.resolve('dist', 'sequelize', 'models'),
-    'seeders-path': path.resolve('dist', 'sequelize', 'seeders'),
-    'migrations-path': path.resolve('dist', 'sequelize', 'migrations')
+let config;
+
+if (process.env.NODE_ENV === 'production') {
+    config = {
+        'config': path.resolve('sequelize', 'config', 'config_cli.js'),
+        'models-path': path.resolve('sequelize', 'models'),
+        'seeders-path': path.resolve('sequelize', 'seeders'),
+        'migrations-path': path.resolve('sequelize', 'migrations')
+    }
+} else {
+    config = {
+        'config': path.resolve('dist', 'sequelize', 'config', 'config_cli.js'),
+        'models-path': path.resolve('dist', 'sequelize', 'models'),
+        'seeders-path': path.resolve('dist', 'sequelize', 'seeders'),
+        'migrations-path': path.resolve('dist', 'sequelize', 'migrations')
+    }
 }
+module.exports = config;

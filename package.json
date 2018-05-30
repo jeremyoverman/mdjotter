@@ -9,6 +9,7 @@
     "build": "gulp",
     "tsc-watch": "tsc -w",
     "start": "node ./dist/app.js",
+    "start:prod": "node app.js",
     "debug": "npm start",
     "sequelize:migrate": "sequelize db:migrate",
     "sequelize:migrate:undo": "sequelize db:migrate:undo",
