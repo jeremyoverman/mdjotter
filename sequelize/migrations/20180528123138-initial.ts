@@ -95,7 +95,9 @@ module.exports = {
                     allowNull: false,
                 },
                 contents: {
-                    type: Sequelize.STRING
+                    type: Sequelize.TEXT({
+                        length: '65536'
+                    })
                 },
                 ownerId: {
                     type: Sequelize.STRING,
