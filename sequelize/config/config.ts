@@ -17,10 +17,10 @@ let config = {
     "operatorsAliases": false
   },
   "production": {
-    "username": "",
-    "password": "",
-    "database": "",
-    "host": "",
+    "username": process.env.MDJOTTER_DB_USER,
+    "password": process.env.MDJOTTER_DB_PASS,
+    "database": process.env.MDJOTTER_DB_DB,
+    "host": process.env.MDJOTTER_DB_HOST,
     "port": 3306,
     "dialect": "mysql",
     "logging": false,
