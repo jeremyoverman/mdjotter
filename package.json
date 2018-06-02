@@ -1,6 +1,6 @@
 {
   "name": "mdjotter",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/app.js",
   "typings": "dist/index.d.ts",
   "files": [
