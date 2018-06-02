@@ -5,7 +5,7 @@ import { UserAttributes } from '../../../sequelize/models/user';
  * Reusable attributes will go in here
  */
 
-export function create(number ? ) {
+export function create(number?: number ) {
     number = number ? number : 1;
     let promises = [];
 

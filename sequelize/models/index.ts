@@ -16,12 +16,16 @@ let debug = Debug('mdjotter:sql');
  * sequelize models. Normally there's no need to edit anything under here.
  */
 
+ export interface DBObject {
+     [name: string]: any;
+ }
+
 export interface DAOModel<I,A,D extends DAO> extends Sequelize.Model<I,A> {
-    DAO?: D;
+    DAO: D;
     postCreate?: Function;
 }
 
-let db = {};
+let db: DBObject = {};
 
 /**
  * Declare a global namespace for Sequelize. This lets you make transactions
@@ -41,11 +45,17 @@ Sequelize.useCLS(namespace);
  * ```
  */
 const dbConfig = config[process.env.NODE_ENV || 'development'];
-const sequelize = new Sequelize( dbConfig['database'], dbConfig['username'], dbConfig['password'], Object.assign(dbConfig, {
-    logging: msg => {
-        debug(msg);
-    }
-}));
+let sequelize: Sequelize.Sequelize;
+
+if (dbConfig.database && dbConfig.username && dbConfig.password) {
+    sequelize = new Sequelize( dbConfig.database, dbConfig.username, dbConfig.password, Object.assign(dbConfig, {
+        logging: (msg: string) => {
+            debug(msg);
+        }
+    }));
+} else {
+    throw new Error('database, username, and password sequelize configuration must be implemented.');
+}
 
 /**
  * Import and initialize all models defined in `/sequelize/models`. This adds them

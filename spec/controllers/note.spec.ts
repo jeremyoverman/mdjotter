@@ -86,7 +86,7 @@ describe('In the note controller', () => {
                     .send(NoteSupport.goodAttributes)
                     .then(res => {
                         return db.note.findById(1, { rejectOnEmpty: true }).then(note => {
-                            expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodAttributes));
+                            expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodAttributes as any));
                         });
                     });
             });
@@ -140,7 +140,7 @@ describe('In the note controller', () => {
                         .send(NoteSupport.goodUpdateAttributes)
                         .then(res => {
                             return db.note.findById(1).then(note => {
-                                expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodUpdateAttributes));
+                                expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodUpdateAttributes as any));
                             });
                         });
                 });
@@ -160,7 +160,7 @@ describe('In the note controller', () => {
                         .send(NoteSupport.badAttributes)
                         .then(res => {
                             return db.note.findById(1).then(note => {
-                                expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodAttributes));
+                                expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodAttributes as any));
                             });
                         })
                 });

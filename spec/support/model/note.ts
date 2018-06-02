@@ -5,7 +5,7 @@ import { NoteAttributes } from '../../../sequelize/models/note';
  * Reusable attributes will go in here
  */
 
-export function create(number ? ) {
+export function create(number?: number ) {
     number = number ? number : 1;
     let promises = [];
 
@@ -22,13 +22,15 @@ export function create(number ? ) {
 export const goodAttributes: NoteAttributes = {
     containerId: 1,
     title: 'My Note',
-    contents: 'My Contents'
+    contents: 'My Contents',
+    ownerId: 'user'
 };
 
 export const goodUpdateAttributes: NoteAttributes = {
     containerId: 2,
     title: 'My Second Note',
-    contents: 'My Second Contents'
+    contents: 'My Second Contents',
+    ownerId: 'user2'
 };
 
 export const badAttributes: any = {

@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
 
-import { Instance, RawInstance } from '../model';
+import { RawInstance } from '../model';
 import { DAOModel } from './index';
 import { UserDAO } from '../dao/user';
 import { DbConnection } from '../dbConnection';
@@ -108,7 +108,7 @@ export type TUserModel = DAOModel < UserInstance, UserAttributes, TDAO > ;
  * @param DataTypes The DataTypes
  */
 export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-    const User: TUserModel = sequelize.define('user', Object.assign < Sequelize.DefineAttributes, Sequelize.DefineAttributes > ({
+    const User = sequelize.define('user', Object.assign < Sequelize.DefineAttributes, Sequelize.DefineAttributes > ({
         /* Do not change anything in here. Automation will fill this out for you, anything that
          * needs to be overwritten should be added to the next object being assigned to this object
          */
@@ -139,7 +139,7 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
         /* Overwrite model attributes here */
     }));
 
-    User.postCreate = function(db: DbConnection, model: TUserModel) {
+    (User as TUserModel).postCreate = function(db: DbConnection, model: TUserModel) {
         model.DAO = new UserDAO();
 
         /* Add your associations here */

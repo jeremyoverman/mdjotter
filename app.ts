@@ -1,8 +1,10 @@
 import * as http from "http";  
 import * as express from "express";  
 import * as bodyParser from "body-parser";  
-import * as swaggerUI from "swagger-ui-express";  
 import Debug from 'debug';
+
+let swaggerUI = require('swagger-ui-express');
+
 let debug = Debug('mdjotter:http');
 
 import { RegisterRoutes } from "./routes/routes";  
@@ -31,7 +33,7 @@ app.use('*', (req, res, next) => {
     res.sendStatus(404);
 })
 
-app.use((err, req, res, next) => {
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.log('Error:', err);
 });
 
@@ -40,7 +42,7 @@ const server = http.createServer(app);
 server.listen(port);
 
 // Handle server events
-server.on('listening', _ => {
+server.on('listening', () => {
     let address = server.address();
 
     let port = typeof address === 'string' ? address : address.port;

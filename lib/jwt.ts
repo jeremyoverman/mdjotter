@@ -27,7 +27,7 @@ export function getUserFromToken(token: string) {
  * 
  * @param userid The user id to create the token for
  */
-export function createToken(userid) {
+export function createToken(userid: string) {
     return db.user.DAO.generateSecret(userid).then((secret: string) => {
         return jwt.sign({ user: userid }, secret, {
             expiresIn: config.jwt_expire

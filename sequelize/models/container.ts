@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
 
-import { Instance, RawInstance } from '../model';
+import { RawInstance } from '../model';
 import { DAOModel } from './index';
 import { ContainerDAO } from '../dao/container';
 import { DbConnection } from '../dbConnection';
@@ -97,7 +97,7 @@ export type TContainerModel = DAOModel < ContainerInstance, ContainerAttributes,
  * @param DataTypes The DataTypes
  */
 export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-    const Container: TContainerModel = sequelize.define('container', Object.assign < Sequelize.DefineAttributes, Sequelize.DefineAttributes > ({
+    const Container = sequelize.define('container', Object.assign < Sequelize.DefineAttributes, Sequelize.DefineAttributes > ({
         /* Do not change anything in here. Automation will fill this out for you, anything that
          * needs to be overwritten should be added to the next object being assigned to this object
          */
@@ -126,7 +126,7 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
         /* Overwrite model attributes here */
     }));
 
-    Container.postCreate = function(db: DbConnection, model: TContainerModel) {
+    (Container as TContainerModel).postCreate = function(db: DbConnection, model: TContainerModel) {
         model.DAO = new ContainerDAO();
 
         /* Add your associations here */

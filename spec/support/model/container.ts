@@ -5,7 +5,7 @@ import { ContainerAttributes } from '../../../sequelize/models/container';
  * Reusable attributes will go in here
  */
 
-export function create(number ? ) {
+export function create(number?: number ) {
     number = number ? number : 1;
     let promises = [];
 

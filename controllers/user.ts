@@ -5,11 +5,11 @@ import * as Errors from '../lib/errors';
 /* yeo: imports */
 import { RawUserInstance, UserAttributes } from '../sequelize/models/user';
 
-import { Get, Put, Post, Delete, Patch, Security, Tags, Route, Response, Body, SuccessResponse } from 'tsoa';
+import { Get, Post, Delete, Patch, Security, Tags, Route, Response, Body } from 'tsoa';
 import { pbkdf2, generateRandomString } from '../lib/crypto';
 import { createToken } from '../lib/jwt';
-import { RawContainerInstance, ContainerAttributes, IRawContainerChildren } from '../sequelize/models/container';
-import { RawNoteInstance, NoteAttributes } from '../sequelize/models/note';
+import { RawContainerInstance, IRawContainerChildren } from '../sequelize/models/container';
+import { RawNoteInstance } from '../sequelize/models/note';
 
 export interface ILoginBody {
     password: string;
@@ -139,8 +139,12 @@ export class UserController extends Controller {
     @Post('{user_id}/login')
     @Response(401)
 
-    async login(user_id: string, @Body() body: ILoginBody): Promise<ILoginResponse> {
+    async login(user_id: string, @Body() body: ILoginBody): Promise<ILoginResponse | undefined> {
         let user = await db.user.DAO.get(user_id);
+
+        if (!user.salt) {
+            throw new Error('A user salt must be provided');
+        }
 
         if (user.password === await pbkdf2(body.password, user.salt)) {
             return { token: await createToken(user.username) };

@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
 
-import { Instance, RawInstance } from '../model';
+import { RawInstance } from '../model';
 import { DAOModel } from './index';
 import { NoteDAO } from '../dao/note';
 import { DbConnection } from '../dbConnection';
@@ -71,7 +71,7 @@ export type TNoteModel = DAOModel < NoteInstance, NoteAttributes, TDAO > ;
  * @param DataTypes The DataTypes
  */
 export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-    const Note: TNoteModel = sequelize.define('note', Object.assign < Sequelize.DefineAttributes, Sequelize.DefineAttributes > ({
+    const Note = sequelize.define('note', Object.assign < Sequelize.DefineAttributes, Sequelize.DefineAttributes > ({
         /* Do not change anything in here. Automation will fill this out for you, anything that
          * needs to be overwritten should be added to the next object being assigned to this object
          */
@@ -100,7 +100,7 @@ export default function defineUser(sequelize: Sequelize.Sequelize, DataTypes: Se
         /* Overwrite model attributes here */
     }));
 
-    Note.postCreate = function(db: DbConnection, model: TNoteModel) {
+    (Note as TNoteModel).postCreate = function(db: DbConnection, model: TNoteModel) {
         model.DAO = new NoteDAO();
 
         /* Add your associations here */

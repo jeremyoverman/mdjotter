@@ -2,7 +2,6 @@ import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
 import Debug from 'debug';
 import db from '../sequelize/models'
-import config from '../config';
 import owners from './owner';
 
 import * as errors from '../lib/errors';
@@ -10,7 +9,7 @@ import { IToken } from '../lib/jwt';
 
 let debug = Debug('mdjotter:auth');
 
-function getDecodedToken (token) {
+function getDecodedToken (token: string) {
     if (!token) return null;
 
     let decoded_token = jwt.decode(token) as IToken;
@@ -38,6 +37,10 @@ export async function expressAuthentication(request: express.Request, securityNa
     let user = await db.user.DAO.get(decoded.user);
     let secret = user.secret;
 
+    if (!secret) {
+        throw new Error('No secret provided');
+    }
+
     debug('User secret: ' + secret);
     // This will throw an exception if it fails to verify the token
     jwt.verify(token, secret);
@@ -56,13 +59,16 @@ export async function expressAuthentication(request: express.Request, securityNa
                 debug('Scopes on token:', scopes)
             }
 
-            if (!scopes.every(scope => decoded.scopes.indexOf(scope) >= 0)) {
+            if (!scopes.every(scope => (decoded.scopes || []).indexOf(scope) >= 0)) {
                 debug('Scopes missing in token');
                 throw errors.NOT_IN_SCOPE;
             }
         }
     } else if (securityName === 'owner') {
         debug('Security Name: owner');
+        if (!scopes) {
+            throw new Error('Scopes must be provided for owner authentication.');
+        }
         return Promise.all(scopes.map(scope => {
             let resource_id = request.params[scope + '_id'];
             let ownerFn = owners[scope];

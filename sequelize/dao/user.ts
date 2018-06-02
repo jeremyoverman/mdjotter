@@ -1,6 +1,5 @@
-import * as Sequelize from 'sequelize';
 import db from '../models/index';
-import { UserInstance, UserAttributes } from '../models/user';
+import { UserAttributes } from '../models/user';
 
 import { DAO } from '../dao';
 import { NOT_FOUND } from '../../lib/errors';
@@ -22,12 +21,14 @@ export class UserDAO < I, A > extends DAO {
         return db.user.findAll();
     }
 
-    get(id: string) {
-        return db.user.findById(id, {
-            rejectOnEmpty: true
-        }).catch(() => {
+    async get(id: string) {
+        let user = await db.user.findById(id);
+
+        if (!user) {
             throw NOT_FOUND;
-        });
+        } else {
+            return user;
+        }
     }
 
     create(attributes: UserAttributes) {
@@ -48,11 +49,15 @@ export class UserDAO < I, A > extends DAO {
     async getContainers (id: string) {
         let user = await this.get(id);
 
-        return user.getContainers({
-            where: {
-                parentId: null
-            }
-        });
+        if (!user) {
+            throw NOT_FOUND;
+        } else {
+            return user.getContainers({
+                where: {
+                    parentId: null
+                }
+            } as any);
+        }
     }
 
     async generateSecret(id: string) {

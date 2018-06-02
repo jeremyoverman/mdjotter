@@ -1,10 +1,8 @@
-import * as Sequelize from 'sequelize';
 import db from '../models/index';
-import { ContainerInstance, ContainerAttributes, RawContainerInstance } from '../models/container';
+import { ContainerAttributes } from '../models/container';
 
 import { DAO } from '../dao';
 import { NOT_FOUND } from '../../lib/errors';
-import { RawNoteInstance } from '../models/note';
 
 export class ContainerDAO < I, A > extends DAO {
     /**
@@ -18,29 +16,31 @@ export class ContainerDAO < I, A > extends DAO {
      */
 
     /* yeo: methods */
-    getAll() {
+    async getAll() {
         return db.container.findAll();
     }
 
-    get(id: number) {
-        return db.container.findById(id, {
-            rejectOnEmpty: true
-        }).catch(() => {
+    async get(id: number) {
+        let container = await db.container.findById(id);
+        
+        if (!container) {
             throw NOT_FOUND;
-        });
+        } else {
+            return container;
+        }
     }
 
-    create(attributes: ContainerAttributes) {
+    async create(attributes: ContainerAttributes) {
         return db.container.create(attributes);
     }
 
-    update(id: number, attributes: Partial<ContainerAttributes>) {
+    async update(id: number, attributes: Partial<ContainerAttributes>) {
         return this.get(id)
             .then(container => container.update(attributes))
             .then(() => this.get(id));
     }
 
-    delete(id: number) {
+    async delete(id: number) {
         return this.get(id)
             .then(container => container.destroy());
     }

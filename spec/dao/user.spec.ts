@@ -1,8 +1,6 @@
 import db from '../../sequelize/models/index';
 import * as setup from '../support/setup';
 
-import { UserInstance, UserAttributes } from '../../sequelize/models/user';
-
 import * as UserSupport from '../support/model/user';
 
 let dao = db.user.DAO;
@@ -43,14 +41,14 @@ describe('In the User DAO', () => {
         describe('with good attributes', () => {
             it('should return the user', () => {
                 return dao.create(UserSupport.goodAttributes).then(user => {
-                    expect(user).toEqual(jasmine.objectContaining(UserSupport.goodAttributes));
+                    expect(user).toEqual(jasmine.objectContaining(UserSupport.goodAttributes as any));
                 });
             });
 
             it('should create the user', () => {
                 return dao.create(UserSupport.goodAttributes).then(() => {
                     return db.user.findById(1, { rejectOnEmpty: true }).then(user => {
-                        expect(user).toEqual(jasmine.objectContaining(UserSupport.goodAttributes));
+                        expect(user).toEqual(jasmine.objectContaining(UserSupport.goodAttributes as any));
                     });
                 });
             });
@@ -72,14 +70,14 @@ describe('In the User DAO', () => {
             describe('and good attributes', () => {
                 it('should return the user', () => {
                     return dao.update(UserSupport.goodAttributes.username, UserSupport.goodUpdateAttributes).then(user => {
-                        expect(user).toEqual(jasmine.objectContaining(UserSupport.goodUpdateAttributes));
+                        expect(user).toEqual(jasmine.objectContaining(UserSupport.goodUpdateAttributes as any));
                     });
                 });
 
                 it('should update the user', () => {
                     return dao.update(UserSupport.goodAttributes.username, UserSupport.goodUpdateAttributes).then(() => {
                         return db.user.findById(1).then(user => {
-                            expect(user).toEqual(jasmine.objectContaining(UserSupport.goodUpdateAttributes));
+                            expect(user).toEqual(jasmine.objectContaining(UserSupport.goodUpdateAttributes as any));
                         });
                     });
                 });
@@ -95,7 +93,7 @@ describe('In the User DAO', () => {
                 it('should not update the user', () => {
                     return dao.update(UserSupport.goodAttributes.username, UserSupport.badAttributes).catch(() => {
                         return db.user.findById(1).then(user => {
-                            expect(user).toEqual(jasmine.objectContaining(UserSupport.goodAttributes));
+                            expect(user).toEqual(jasmine.objectContaining(UserSupport.goodAttributes as any));
                         });
                     });
                 });

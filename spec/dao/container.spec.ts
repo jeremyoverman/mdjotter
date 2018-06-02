@@ -1,8 +1,6 @@
 import db from '../../sequelize/models/index';
 import * as setup from '../support/setup';
 
-import { ContainerInstance, ContainerAttributes } from '../../sequelize/models/container';
-
 import * as ContainerSupport from '../support/model/container';
 
 let dao = db.container.DAO;
@@ -43,14 +41,14 @@ describe('In the Container DAO', () => {
         describe('with good attributes', () => {
             it('should return the container', () => {
                 return dao.create(ContainerSupport.goodAttributes).then(container => {
-                    expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodAttributes));
+                    expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodAttributes as any));
                 });
             });
 
             it('should create the container', () => {
                 return dao.create(ContainerSupport.goodAttributes).then(() => {
                     return db.container.findById(1, { rejectOnEmpty: true }).then(container => {
-                        expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodAttributes));
+                        expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodAttributes as any));
                     });
                 });
             });
@@ -72,14 +70,14 @@ describe('In the Container DAO', () => {
             describe('and good attributes', () => {
                 it('should return the container', () => {
                     return dao.update(1, ContainerSupport.goodUpdateAttributes).then(container => {
-                        expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodUpdateAttributes));
+                        expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodUpdateAttributes as any));
                     });
                 });
 
                 it('should update the container', () => {
                     return dao.update(1, ContainerSupport.goodUpdateAttributes).then(() => {
                         return db.container.findById(1).then(container => {
-                            expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodUpdateAttributes));
+                            expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodUpdateAttributes as any));
                         });
                     });
                 });
@@ -95,7 +93,7 @@ describe('In the Container DAO', () => {
                 it('should not update the container', () => {
                     return dao.update(1, ContainerSupport.badAttributes).catch(() => {
                         return db.container.findById(1).then(container => {
-                            expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodAttributes));
+                            expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodAttributes as any));
                         });
                     });
                 });

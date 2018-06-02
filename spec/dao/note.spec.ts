@@ -1,8 +1,6 @@
 import db from '../../sequelize/models/index';
 import * as setup from '../support/setup';
 
-import { NoteInstance, NoteAttributes } from '../../sequelize/models/note';
-
 import * as NoteSupport from '../support/model/note';
 
 let dao = db.note.DAO;
@@ -43,14 +41,14 @@ describe('In the Note DAO', () => {
         describe('with good attributes', () => {
             it('should return the note', () => {
                 return dao.create(NoteSupport.goodAttributes).then(note => {
-                    expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodAttributes));
+                    expect(note.get()).toEqual(jasmine.objectContaining(NoteSupport.goodAttributes as any));
                 });
             });
 
             it('should create the note', () => {
                 return dao.create(NoteSupport.goodAttributes).then(() => {
                     return db.note.findById(1, { rejectOnEmpty: true }).then(note => {
-                        expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodAttributes));
+                        expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodAttributes as any));
                     });
                 });
             });
@@ -72,14 +70,14 @@ describe('In the Note DAO', () => {
             describe('and good attributes', () => {
                 it('should return the note', () => {
                     return dao.update(1, NoteSupport.goodUpdateAttributes).then(note => {
-                        expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodUpdateAttributes));
+                        expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodUpdateAttributes as any));
                     });
                 });
 
                 it('should update the note', () => {
                     return dao.update(1, NoteSupport.goodUpdateAttributes).then(() => {
                         return db.note.findById(1).then(note => {
-                            expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodUpdateAttributes));
+                            expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodUpdateAttributes as any));
                         });
                     });
                 });
@@ -95,7 +93,7 @@ describe('In the Note DAO', () => {
                 it('should not update the note', () => {
                     return dao.update(1, NoteSupport.badAttributes).catch(() => {
                         return db.note.findById(1).then(note => {
-                            expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodAttributes));
+                            expect(note).toEqual(jasmine.objectContaining(NoteSupport.goodAttributes as any));
                         });
                     });
                 });

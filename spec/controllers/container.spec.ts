@@ -86,7 +86,7 @@ describe('In the container controller', () => {
                     .send(ContainerSupport.goodAttributes)
                     .then(res => {
                         return db.container.findById(1, { rejectOnEmpty: true }).then(container => {
-                            expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodAttributes));
+                            expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodAttributes as any));
                         });
                     });
             });
@@ -140,7 +140,7 @@ describe('In the container controller', () => {
                         .send(ContainerSupport.goodUpdateAttributes)
                         .then(res => {
                             return db.container.findById(1).then(container => {
-                                expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodUpdateAttributes));
+                                expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodUpdateAttributes as any));
                             });
                         });
                 });
@@ -160,7 +160,7 @@ describe('In the container controller', () => {
                         .send(ContainerSupport.badAttributes)
                         .then(res => {
                             return db.container.findById(1).then(container => {
-                                expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodAttributes));
+                                expect(container).toEqual(jasmine.objectContaining(ContainerSupport.goodAttributes as any));
                             });
                         })
                 });

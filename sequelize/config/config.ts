@@ -1,4 +1,10 @@
-let config = {
+import * as Sequlize from 'sequelize';
+
+export interface IConfig {
+  [env: string]: Sequlize.Options;
+};
+
+let config: IConfig = {
   "test": {
     "dialect": "sqlite",
     "timezone": "+00:00",
@@ -12,7 +18,6 @@ let config = {
     "port": 3306,
     "dialect": "mysql",
     "logging": false,
-    "force": true,
     "timezone": "+00:00",
     "operatorsAliases": false
   },
@@ -24,7 +29,6 @@ let config = {
     "port": 3306,
     "dialect": "mysql",
     "logging": false,
-    "force": true,
     "timezone": "+00:00",
     "operatorsAliases": false
   }

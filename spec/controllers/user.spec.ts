@@ -86,7 +86,7 @@ describe('In the user controller', () => {
                     .send(UserSupport.goodAttributes)
                     .then(res => {
                         return db.user.findById(1, { rejectOnEmpty: true }).then(user => {
-                            expect(user).toEqual(jasmine.objectContaining(UserSupport.goodAttributes));
+                            expect(user).toEqual(jasmine.objectContaining(UserSupport.goodAttributes as any));
                         });
                     });
             });
@@ -140,7 +140,7 @@ describe('In the user controller', () => {
                         .send(UserSupport.goodUpdateAttributes)
                         .then(res => {
                             return db.user.findById(1).then(user => {
-                                expect(user).toEqual(jasmine.objectContaining(UserSupport.goodUpdateAttributes));
+                                expect(user).toEqual(jasmine.objectContaining(UserSupport.goodUpdateAttributes as any));
                             });
                         });
                 });
@@ -160,7 +160,7 @@ describe('In the user controller', () => {
                         .send(UserSupport.badAttributes)
                         .then(res => {
                             return db.user.findById(1).then(user => {
-                                expect(user).toEqual(jasmine.objectContaining(UserSupport.goodAttributes));
+                                expect(user).toEqual(jasmine.objectContaining(UserSupport.goodAttributes as any));
                             });
                         })
                 });
