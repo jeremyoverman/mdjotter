@@ -2,6 +2,9 @@
   "name": "mdjotter",
   "version": "1.0.0",
   "main": "dist/app.js",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "test": "cross-env NODE_ENV=test jasmine",
     "swagger": "tsoa swagger",
@@ -13,7 +16,8 @@
     "debug": "npm start",
     "sequelize:migrate": "sequelize db:migrate",
     "sequelize:migrate:undo": "sequelize db:migrate:undo",
-    "sequelize:migrate:undo:all": "sequelize db:migrate:undo:all"
+    "sequelize:migrate:undo:all": "sequelize db:migrate:undo:all",
+    "prepublish": "npm build"
   },
   "dependencies": {
     "sequelize-cli": "^4.0.0",
