@@ -37,7 +37,7 @@ function runTSOA(cmd) {
     });
 }
 
-gulp.task('scripts', (cb) => {
+gulp.task('scripts', function scripts(cb) {
     runTSOA('routes').then(() => {
         tsProject.src()
             .pipe(sourcemaps.init())
@@ -57,7 +57,7 @@ gulp.task('scripts', (cb) => {
     });
 });
 
-gulp.task('swagger', function (cb) {
+gulp.task('swagger', function swagger (cb) {
     runTSOA('swagger')
         .then(_ => cb())
         .catch(err => {
@@ -65,8 +65,8 @@ gulp.task('swagger', function (cb) {
         });
 });
 
-gulp.task('copy-files', ['swagger'], function () {
-    gulp.src([
+gulp.task('copy-files', gulp.series('swagger', function copyFiles () {
+    return gulp.src([
         '**/*.json',
         '.sequelizerc',
         '!package.json',
@@ -74,6 +74,8 @@ gulp.task('copy-files', ['swagger'], function () {
         '!.vscode/**/*',
         '!dist/**/*'
     ]).pipe(gulp.dest('dist/'));
-});
+}));
 
-gulp.task('default', ['scripts', 'copy-files']);
+gulp.task('default', gulp.series('scripts', 'copy-files', function def (done) {
+    done();
+}));
