@@ -13,5 +13,8 @@
         "entryFile": "./index.ts",
         "routesDir": "./routes",
         "authenticationModule": "./authentication/index.ts"
-    }
+    },
+    "ignore": [
+        "**/dist/**"
+    ]
 }

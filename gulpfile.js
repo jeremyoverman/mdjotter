@@ -39,7 +39,7 @@ function runTSOA(cmd) {
 
 gulp.task('scripts', (cb) => {
     runTSOA('routes').then(() => {
-        gulp.src(['**/*.ts', '!node_modules/**/*'])
+        tsProject.src()
             .pipe(sourcemaps.init())
             .pipe(tsProject())
             .pipe(sourcemaps.write('./', {

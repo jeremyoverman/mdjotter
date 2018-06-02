@@ -3,7 +3,7 @@ import { ContainerAttributes, ContainerInstance } from '../models/container';
 
 import { DAO } from '../dao';
 import { NOT_FOUND } from '../../lib/errors';
-import { NoteInstance } from '../..';
+import { NoteInstance } from '../../sequelize/models/note';
 
 export interface IContainerChildren {
     containers: ContainerInstance[],

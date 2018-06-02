@@ -4,7 +4,8 @@ import { UserAttributes, UserInstance } from '../models/user';
 import { DAO } from '../dao';
 import { NOT_FOUND } from '../../lib/errors';
 import { generateRandomString } from '../../lib/crypto';
-import { ContainerInstance, NoteInstance } from '../..';
+import { ContainerInstance } from '../../sequelize/models/container';
+import { NoteInstance } from '../../sequelize/models/note';
 
 export class UserDAO < I, A > extends DAO {
     /**
