@@ -1,9 +1,10 @@
 import db from '../models/index';
-import { UserAttributes } from '../models/user';
+import { UserAttributes, UserInstance } from '../models/user';
 
 import { DAO } from '../dao';
 import { NOT_FOUND } from '../../lib/errors';
 import { generateRandomString } from '../../lib/crypto';
+import { ContainerInstance, NoteInstance } from '../..';
 
 export class UserDAO < I, A > extends DAO {
     /**
@@ -17,11 +18,11 @@ export class UserDAO < I, A > extends DAO {
      */
 
     /* yeo: methods */
-    getAll() {
+    async getAll(): Promise<UserInstance[]> {
         return db.user.findAll();
     }
 
-    async get(id: string) {
+    async get(id: string): Promise<UserInstance> {
         let user = await db.user.findById(id);
 
         if (!user) {
@@ -31,22 +32,22 @@ export class UserDAO < I, A > extends DAO {
         }
     }
 
-    create(attributes: UserAttributes) {
+    async create(attributes: UserAttributes): Promise<UserInstance> {
         return db.user.create(attributes);
     }
 
-    update(id: string, attributes: UserAttributes) {
+    async update(id: string, attributes: UserAttributes): Promise<UserInstance> {
         return this.get(id)
             .then(user => user.update(attributes))
             .then(() => this.get(id));
     }
 
-    delete(id: string) {
+    async delete(id: string): Promise<void> {
         return this.get(id)
             .then(user => user.destroy());
     }
 
-    async getContainers (id: string) {
+    async getContainers (id: string): Promise<ContainerInstance[]> {
         let user = await this.get(id);
 
         if (!user) {
@@ -60,7 +61,7 @@ export class UserDAO < I, A > extends DAO {
         }
     }
 
-    async generateSecret(id: string) {
+    async generateSecret(id: string): Promise<string> {
         let user = await this.get(id);
         let secret = generateRandomString(32)
 
@@ -69,7 +70,7 @@ export class UserDAO < I, A > extends DAO {
         return secret;
     }
 
-    async getNotes (id: string) {
+    async getNotes (id: string): Promise<NoteInstance[]> {
         let user = await this.get(id);
 
         return user.getNotes();

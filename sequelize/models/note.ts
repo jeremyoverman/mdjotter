@@ -53,7 +53,7 @@ export interface NoteInstance extends Sequelize.Instance < NoteAttributes > , Ra
  * etc.
  * ```
  */
-type TDAO = NoteDAO < NoteInstance, NoteAttributes > ;
+export type TDAO = NoteDAO < NoteInstance, NoteAttributes > ;
 export type TNoteModel = DAOModel < NoteInstance, NoteAttributes, TDAO > ;
 
 

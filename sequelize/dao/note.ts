@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
 import db from '../models/index';
-import { NoteAttributes } from '../models/note';
+import { NoteAttributes, NoteInstance } from '../models/note';
 
 import { DAO } from '../dao';
 import { NOT_FOUND } from '../../lib/errors';
@@ -17,11 +17,11 @@ export class NoteDAO < I, A > extends DAO {
      */
 
     /* yeo: methods */
-    async getAll() {
+    async getAll(): Promise<NoteInstance[]> {
         return db.note.findAll();
     }
 
-    async get(id: number) {
+    async get(id: number): Promise<NoteInstance> {
         let note = await db.note.findById(id);
 
         if (!note) {
@@ -31,22 +31,22 @@ export class NoteDAO < I, A > extends DAO {
         }
     }
 
-    async create(attributes: NoteAttributes) {
+    async create(attributes: NoteAttributes): Promise<NoteInstance> {
         return db.note.create(attributes);
     }
 
-    async update(id: number, attributes: Partial<NoteAttributes>) {
+    async update(id: number, attributes: Partial<NoteAttributes>): Promise<NoteInstance> {
         return this.get(id)
             .then(note => note.update(attributes))
             .then(() => this.get(id));
     }
 
-    async delete(id: number) {
+    async delete(id: number): Promise<void> {
         return this.get(id)
             .then(note => note.destroy());
     }
 
-    async search(user_id: string, query: string) {
+    async search(user_id: string, query: string): Promise<NoteInstance[]> {
         return db.note.findAll({
             where: {
                 ownerId: user_id,

@@ -90,7 +90,7 @@ export interface UserInstance extends Sequelize.Instance < UserAttributes > , Ra
  * etc.
  * ```
  */
-type TDAO = UserDAO < UserInstance, UserAttributes > ;
+export type TDAO = UserDAO < UserInstance, UserAttributes > ;
 export type TUserModel = DAOModel < UserInstance, UserAttributes, TDAO > ;
 
 

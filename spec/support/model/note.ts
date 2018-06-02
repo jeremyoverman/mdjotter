@@ -1,11 +1,11 @@
 import db from '../../../sequelize/models';
-import { NoteAttributes } from '../../../sequelize/models/note';
+import { NoteAttributes, NoteInstance } from '../../../sequelize/models/note';
 
 /**
  * Reusable attributes will go in here
  */
 
-export function create(number?: number ) {
+export async function create(number?: number ): Promise<NoteInstance[]> {
     number = number ? number : 1;
     let promises = [];
 

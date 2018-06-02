@@ -36,11 +36,6 @@ const models: TsoaRoute.Models = {
     },
     "PromiseLikevoid": {
     },
-    "ILoginResponse": {
-        "properties": {
-            "token": { "dataType": "string", "required": true },
-        },
-    },
     "ILoginBody": {
         "properties": {
             "password": { "dataType": "string", "required": true },

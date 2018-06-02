@@ -2,6 +2,7 @@
   "name": "mdjotter",
   "version": "1.0.1",
   "main": "dist/app.js",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],

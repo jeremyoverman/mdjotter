@@ -1,8 +1,14 @@
 import db from '../models/index';
-import { ContainerAttributes } from '../models/container';
+import { ContainerAttributes, ContainerInstance } from '../models/container';
 
 import { DAO } from '../dao';
 import { NOT_FOUND } from '../../lib/errors';
+import { NoteInstance } from '../..';
+
+export interface IContainerChildren {
+    containers: ContainerInstance[],
+    notes: NoteInstance[]
+}
 
 export class ContainerDAO < I, A > extends DAO {
     /**
@@ -16,11 +22,11 @@ export class ContainerDAO < I, A > extends DAO {
      */
 
     /* yeo: methods */
-    async getAll() {
+    async getAll(): Promise<ContainerInstance[]> {
         return db.container.findAll();
     }
 
-    async get(id: number) {
+    async get(id: number): Promise<ContainerInstance> {
         let container = await db.container.findById(id);
         
         if (!container) {
@@ -30,22 +36,22 @@ export class ContainerDAO < I, A > extends DAO {
         }
     }
 
-    async create(attributes: ContainerAttributes) {
+    async create(attributes: ContainerAttributes): Promise<ContainerInstance> {
         return db.container.create(attributes);
     }
 
-    async update(id: number, attributes: Partial<ContainerAttributes>) {
+    async update(id: number, attributes: Partial<ContainerAttributes>): Promise<ContainerInstance> {
         return this.get(id)
             .then(container => container.update(attributes))
             .then(() => this.get(id));
     }
 
-    async delete(id: number) {
+    async delete(id: number): Promise<void> {
         return this.get(id)
             .then(container => container.destroy());
     }
 
-    async getChildren(id: number) {
+    async getChildren(id: number): Promise<IContainerChildren> {
         let parent = await this.get(id);
 
         let containers = await parent.getContainers();

@@ -79,7 +79,7 @@ export interface IRawContainerChildren {
  * etc.
  * ```
  */
-type TDAO = ContainerDAO < ContainerInstance, ContainerAttributes > ;
+export type TDAO = ContainerDAO < ContainerInstance, ContainerAttributes > ;
 export type TContainerModel = DAOModel < ContainerInstance, ContainerAttributes, TDAO > ;
 
 

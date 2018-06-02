@@ -1,11 +1,11 @@
 import db from '../../../sequelize/models';
-import { ContainerAttributes } from '../../../sequelize/models/container';
+import { ContainerAttributes, ContainerInstance } from '../../../sequelize/models/container';
 
 /**
  * Reusable attributes will go in here
  */
 
-export function create(number?: number ) {
+export async function create(number?: number ): Promise<ContainerInstance[]> {
     number = number ? number : 1;
     let promises = [];
 
